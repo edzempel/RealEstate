@@ -1,5 +1,6 @@
 import csv
 import os
+import statistics
 
 from data_types import Purchase
 
@@ -57,8 +58,21 @@ def query_data(data):
         low_purchase.price, low_purchase.beds, low_purchase.baths))
 
     # average price house?
-    # average price of 2 beroom houses
-    pass
+    prices = []
+    for pur in data:
+        prices.append(pur.price)
+
+    ave_price = statistics.mean(prices)
+    print("The average home price is ${:,}".format(int(ave_price)))
+
+    # average price of 2 bedroom houses
+    prices = []
+    for pur in data:
+        if pur.beds == 2:
+            prices.append(pur.price)
+
+    ave_price = statistics.mean(prices)
+    print("The average 2-bedroom home price is ${:,}".format(int(ave_price)))
 
 
 if __name__ == '__main__':
