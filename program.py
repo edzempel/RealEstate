@@ -58,21 +58,45 @@ def query_data(data):
         low_purchase.price, low_purchase.beds, low_purchase.baths))
 
     # average price house?
-    prices = []
-    for pur in data:
-        prices.append(pur.price)
+    # prices = []
+    # for pur in data:
+    #     prices.append(pur.price)
+
+    # list comprehension
+    # make a list out of another data source
+    prices = [
+        p.price  # projection or items to create
+        for p in data  # set to process
+    ]
 
     ave_price = statistics.mean(prices)
     print("The average home price is ${:,}".format(int(ave_price)))
 
     # average price of 2 bedroom houses
-    prices = []
-    for pur in data:
-        if pur.beds == 2:
-            prices.append(pur.price)
+    # prices = []
+    # baths = []
+    # for pur in data:
+    #     if pur.beds == 2:
+    #         prices.append(pur.price)
+    #       baths.append(pur.baths)
 
-    ave_price = statistics.mean(prices)
-    print("The average 2-bedroom home price is ${:,}".format(int(ave_price)))
+    two_bed_homes = [
+        p  # projection or items to create
+        for p in data  # set to process
+        if announce(p, '2-bedrooms, found {}'.format(p.beds)) and p.beds == 2  # test / condition
+    ]
+
+    # list comprehensions (are similar to generator expressions)
+    ave_price = statistics.mean([p.price for p in two_bed_homes])
+    ave_baths = statistics.mean([p.baths for p in two_bed_homes])
+    ave_sq__ft = statistics.mean([p.sq__ft for p in two_bed_homes])
+    print("The average 2-bedroom home price is ${:,}, baths={}, sq  ft={:,}"
+          .format(int(ave_price), round(ave_baths), round(ave_sq__ft)))
+
+
+def announce(item, msg):
+    print("Pulling item {} for {}".format(item, msg))
+    return item
 
 
 if __name__ == '__main__':
