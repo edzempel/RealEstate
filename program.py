@@ -80,18 +80,27 @@ def query_data(data):
     #         prices.append(pur.price)
     #       baths.append(pur.baths)
 
-    two_bed_homes = [
+    # change from list comprehension to generator expression
+    #     has yeild / co-routine behavior
+    #     can no longer use indexing / slicing
+    two_bed_homes = (
         p  # projection or items to create
         for p in data  # set to process
         if announce(p, '2-bedrooms, found {}'.format(p.beds)) and p.beds == 2  # test / condition
-    ]
+    )
+
+    homes = []
+    for h in two_bed_homes:
+        if len(homes) > 5:
+            break
+        homes.append(h)
 
     # list comprehensions (are similar to generator expressions)
-    ave_price = statistics.mean([p.price for p in two_bed_homes])
-    ave_baths = statistics.mean([p.baths for p in two_bed_homes])
-    ave_sq__ft = statistics.mean([p.sq__ft for p in two_bed_homes])
+    ave_price = statistics.mean((p.price for p in homes))
+    ave_baths = statistics.mean((p.baths for p in homes))
+    ave_sq__ft = statistics.mean((p.sq__ft for p in homes))
     print("The average 2-bedroom home price is ${:,}, baths={}, sq  ft={:,}"
-          .format(int(ave_price), round(ave_baths), round(ave_sq__ft)))
+          .format(int(ave_price), round(ave_baths, 1), round(ave_sq__ft, 1)))
 
 
 def announce(item, msg):
